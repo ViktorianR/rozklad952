@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rozklad 952</title>
+
+    <style>
+        .page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100dvh;
+            padding: 20px 0;
+        }
+
+        .week {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            width: 90vw;
+        }
+
+        .day {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            overflow: auto;
+        }
+
+        .day table {
+            min-width: 500px;
+        }
+
+        .dayname {
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        @media (min-width: 900px) {
+            .week {
+                width: 100vw;
+            }
+
+            .day {
+                width: calc(50% - 25px);
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .day {
+                width: calc(33.333333% - 25px);
+            }
+        }
+    </style>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="page">
+        <div class="week" id="week"></div>
+    </div>
+
+    <script>
+        const ROOT = document.getElementById("week");
+
+        const days = [{
+                name: "Понеділок",
+                lections: [{
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                    {
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                    {
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                    {
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                ],
+            },
+            {
+                name: "Вівторок",
+                lections: [{
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                    {
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                    {
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                    {
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                ],
+            },
+            {
+                name: "Четвер",
+                lections: [{
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                    {
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                    {
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                    {
+                        teacher: "Іванов Іван",
+                        discipline: "Основи основ",
+                        link: "#",
+                    },
+                ],
+            },
+        ];
+
+        let weekTemplate = ``;
+
+        days.forEach(({
+            name,
+            lections,
+        }) => {
+            let lectionsTemplate = "";
+
+            lections.forEach(({
+                teacher,
+                discipline,
+                link,
+            }, idx) => {
+                lectionsTemplate += `
+                    <tr class="bg-white border-4 border-gray-200">
+                        <td>
+                            <span class="flex justify-center text-center">${discipline ? idx + 1 : "-"}</span>
+                        </td>
+                        <td class="py-2">
+                            <span class="flex justify-center text-center">${teacher}</span>
+                        </td>
+                        <td class="py-2">
+                            <span class="flex justify-center text-center">${discipline || "-"}</span>
+                        </td>
+                        <td class="py-2">
+                            ${
+                                link 
+                                    ?   `<div class="flex justify-center">
+                                            <a
+                                                href="${link}"
+                                                class="cursor-pointer bg-indigo-500 text-white px-4 py-2 border rounded-md hover:bg-white hover:border-indigo-500 hover:text-black ">
+                                                Open Link
+                                            </a>
+                                        </div>`
+                                    :   `<span class="flex justify-center text-center">-</span>`
+                            }
+                        </td>
+                    </tr>
+                `;
+            });
+
+            weekTemplate += `
+                <div class="day text-base">
+                    <span class="dayname text-sky-400 text-lg font-semibold font-sans uppercase">${name}</span>
+                    <table class="min-w-full table-auto">
+                        <thead class="justify-between">
+                            <tr class="bg-gray-800">
+                                <th class="py-2">
+                                    <span class="text-gray-300">#</span>
+                                </th>
+                                <th class="py-2">
+                                    <span class="text-gray-300">Викладач</span>
+                                </th>
+                                <th class="py-2">
+                                    <span class="text-gray-300">Дисципліна</span>
+                                </th>
+                                <th class="py-2">
+                                    <span class="text-gray-300">Посилання</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-gray-200">
+                            ${lectionsTemplate}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        });
+
+        ROOT.innerHTML = weekTemplate;
+    </script>
+</body>
+
+</html>
