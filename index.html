@@ -40,6 +40,10 @@
             display: inline-block;
         }
 
+        .day.active .dayname {
+            color: #f00;
+        }
+
         @media (min-width: 900px) {
             .week {
                 width: 100vw;
@@ -66,10 +70,13 @@
     </div>
 
     <script>
+        const currentDayNumber = new Date().getDay();
+
         const ROOT = document.getElementById("week");
 
         const days = [{
                 name: "Понеділок",
+                dayNumber: 1,
                 lections: [{
                         teacher: "Іванов Іван",
                         discipline: "Основи основ",
@@ -94,6 +101,7 @@
             },
             {
                 name: "Вівторок",
+                dayNumber: 2,
                 lections: [{
                         teacher: "Іванов Іван",
                         discipline: "Основи основ",
@@ -118,6 +126,7 @@
             },
             {
                 name: "Четвер",
+                dayNumber: 4,
                 lections: [{
                         teacher: "Іванов Іван",
                         discipline: "Основи основ",
@@ -147,6 +156,7 @@
         days.forEach(({
             name,
             lections,
+            dayNumber,
         }) => {
             let lectionsTemplate = "";
 
@@ -184,7 +194,7 @@
             });
 
             weekTemplate += `
-                <div class="day text-base">
+                <div class="day text-base${currentDayNumber === dayNumber ? " active" : ""}">
                     <span class="dayname text-sky-400 text-lg font-semibold font-sans uppercase">${name}</span>
                     <table class="min-w-full table-auto">
                         <thead class="justify-between">
