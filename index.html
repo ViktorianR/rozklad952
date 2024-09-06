@@ -118,7 +118,10 @@
 
             const timeRange = Object.entries(lectionTimeRange);
 
-            let activeLection = null;
+            let activeLection = {
+                current: null,
+                next: null,
+            };
 
             for (let i = 0; i < timeRange.length; i++) {
                 const [key, value] = timeRange[i];
