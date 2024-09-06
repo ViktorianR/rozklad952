@@ -74,6 +74,71 @@
 
         const ROOT = document.getElementById("week");
 
+        const getTimeFormat = (hours, minutes) => ({
+            hours,
+            minutes,
+        });
+
+        const getTimeTemplate = (from, to, delay) => ({
+            from: getTimeFormat(...from),
+            to: getTimeFormat(...to),
+            delay,
+        });
+
+        const lectionTimeRange = {
+            1: getTimeTemplate([8, 0], [9, 20], 10),
+            2: getTimeTemplate([9, 30], [10, 50], 10),
+            3: getTimeTemplate([11, 0], [12, 20], 40),
+            4: getTimeTemplate([13, 0], [14, 20], 10),
+            5: getTimeTemplate([14, 30], [15, 50], 10),
+            6: getTimeTemplate([16, 0], [17, 20], 10),
+            7: getTimeTemplate([20, 0], [21, 40], 10),
+        };
+
+
+        const getActiveLectionNumber = () => {
+            const currentDate = new Date();
+
+            const currentTime = {
+                hours: currentDate.getHours(),
+                minutes: currentDate.getMinutes(),
+            };
+
+            const timeRange = Object.entries(lectionTimeRange);
+
+            let activeLection = null;
+
+            for (let i = 0; i < timeRange.length; i++) {
+                const [key, value] = timeRange[i];
+                const keyNum = Number(key);
+
+                const {
+                    from,
+                    to,
+                } = value;
+
+                if (from.hours <= currentTime.hours && to.hours >= currentTime.hours) {
+                    if (from.minutes <= currentTime.minutes && to.minutes >= currentTime.minutes) {
+                        activeLection = {
+                            current: key,
+                            next: null,
+                        };
+
+                        break;
+                    }
+
+                    activeLection = {
+                        current: key,
+                        next: lectionTimeRange?.[keyNum + 1] ? keyNum + 1 : null,
+                    };
+                }
+            }
+
+            return activeLection;
+        };
+
+        const activeLection = getActiveLectionNumber();
+
         const days = [{
                 name: "Понеділок",
                 dayNumber: 1,
@@ -158,6 +223,8 @@
             lections,
             dayNumber,
         }) => {
+            const isActiveDay = currentDayNumber === dayNumber;
+
             let lectionsTemplate = "";
 
             lections.forEach(({
@@ -165,8 +232,11 @@
                 discipline,
                 link,
             }, idx) => {
+                const isActiveLection = activeLection.current == idx + 1 && isActiveDay;
+                const isNextLection = activeLection.next == idx + 1 && isActiveDay;
+
                 lectionsTemplate += `
-                    <tr class="bg-white border-4 border-gray-200">
+                    <tr class="border-4 border-gray-200${isActiveLection ? " bg-red-400" : isNextLection ? " bg-cyan-300" : " bg-white"}">
                         <td>
                             <span class="flex justify-center text-center">${discipline ? idx + 1 : "-"}</span>
                         </td>
@@ -194,7 +264,7 @@
             });
 
             weekTemplate += `
-                <div class="day text-base${currentDayNumber === dayNumber ? " active" : ""}">
+                <div class="day text-base${isActiveDay ? " active" : ""}">
                     <span class="dayname text-sky-400 text-lg font-semibold font-sans uppercase">${name}</span>
                     <table class="min-w-full table-auto">
                         <thead class="justify-between">
