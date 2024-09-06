@@ -44,6 +44,16 @@
             color: #f00;
         }
 
+        .weekend {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .weekend.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         @media (min-width: 900px) {
             .week {
                 width: 100vw;
@@ -67,12 +77,15 @@
 <body>
     <div class="page">
         <div class="week" id="week"></div>
+        <span id="weekend" class="weekend fixed inset-x-0 bottom-0 bg-lime-500 text-white font-bold flex justify-center">Вихідний</span>
     </div>
 
     <script>
         const currentDayNumber = new Date().getDay();
 
         const ROOT = document.getElementById("week");
+        const WEEKEND = document.getElementById("weekend");
+        const weekends = [3,5,6,0];
 
         const getTimeFormat = (hours, minutes) => ({
             hours,
@@ -94,7 +107,6 @@
             6: getTimeTemplate([16, 0], [17, 20], 10),
             7: getTimeTemplate([20, 0], [21, 40], 10),
         };
-
 
         const getActiveLectionNumber = () => {
             const currentDate = new Date();
@@ -292,6 +304,10 @@
         });
 
         ROOT.innerHTML = weekTemplate;
+
+        if (weekends.includes(currentDayNumber)) {
+            WEEKEND.classList.add("active");
+        }
     </script>
 </body>
 
