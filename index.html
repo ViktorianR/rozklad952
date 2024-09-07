@@ -81,7 +81,47 @@
     </div>
 
     <script>
-        const currentDayNumber = new Date().getDay();
+        /**
+         * Returns the week number for this date.  dowOffset is the day of week the week
+         * "starts" on for your locale - it can be from 0 to 6. If dowOffset is 1 (Monday),
+         * the week returned is the ISO 8601 week number.
+         * @param int dowOffset
+         * @return int
+         */
+        Date.prototype.getWeek = function (dowOffset) {
+        /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
+
+            dowOffset = typeof(dowOffset) == 'number' ? dowOffset : 0; //default dowOffset to zero
+            const newYear = new Date(this.getFullYear(), 0, 1);
+
+            let day = newYear.getDay() - dowOffset; //the day of week the year begins on
+            day = (day >= 0 ? day : day + 7);
+
+            const daynum = Math.floor((this.getTime() - newYear.getTime() - (this.getTimezoneOffset()-newYear.getTimezoneOffset())*60000)/86400000) + 1;
+            
+            let weeknum = Math.floor((daynum+day-1)/7);
+
+            //if the year starts before the middle of a week
+            if(day < 4) {
+                weeknum = Math.floor((daynum+day-1)/7) + 1;
+
+                if(weeknum > 52) {
+                    nYear = new Date(this.getFullYear() + 1,0,1);
+                    nday = nYear.getDay() - dowOffset;
+                    nday = nday >= 0 ? nday : nday + 7;
+                    /*if the next year starts before the middle of
+                    the week, it is week #1 of that year*/
+                    weeknum = nday < 4 ? 1 : 53;
+                }
+            }
+
+            return weeknum;
+        };
+
+
+        const currentDate = new Date();
+        const currentDayNumber = currentDate.getDay();
+        const isDenominator = currentDate.getWeek() % 2 !== 0;
 
         const ROOT = document.getElementById("week");
         const WEEKEND = document.getElementById("weekend");
@@ -154,28 +194,20 @@
 
         const activeLection = getActiveLectionNumber();
 
-        const days = [{
+        const denominationDays = [
+            {
                 name: "Понеділок",
                 dayNumber: 1,
-                lections: [{
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                lections: [
+                    {
+                        teacher: "-",
+                        discipline: "-",
+                        link: null,
                     },
                     {
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
-                    },
-                    {
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
-                    },
-                    {
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                        teacher: "Шаравара В.В",
+                        discipline: "Agile",
+                        link: "https://us05web.zoom.us/j/89552674199?pwd=NoklBOAxqLvQ5Qbt0ER49oSBvy73VZ.1",
                     },
                 ],
             },
@@ -231,9 +263,84 @@
             },
         ];
 
+        const days = [
+            {
+                name: "Понеділок",
+                dayNumber: 1,
+                lections: [
+                    {
+                        teacher: "-",
+                        discipline: "-",
+                        link: null,
+                    },
+                    {
+                        teacher: "Шаравара В.В",
+                        discipline: "Agile",
+                        link: "https://us05web.zoom.us/j/89552674199?pwd=NoklBOAxqLvQ5Qbt0ER49oSBvy73VZ.1",
+                    },
+                    {
+                        teacher: "Шаравара В.В",
+                        discipline: "Сучасні освітні технології",
+                        link: "https://us05web.zoom.us/j/89552674199?pwd=NoklBOAxqLvQ5Qbt0ER49oSBvy73VZ.1",
+                    },
+                    {
+                        teacher: "Шаравара В.В",
+                        discipline: "Сучасні освітні технології",
+                        link: "https://us05web.zoom.us/j/89552674199?pwd=NoklBOAxqLvQ5Qbt0ER49oSBvy73VZ.1",
+                    },
+                ],
+            },
+            {
+                name: "Вівторок",
+                dayNumber: 2,
+                lections: [
+                    {
+                        teacher: "-",
+                        discipline: "-",
+                        link: null,
+                    },
+                    {
+                        teacher: "Івченко Ю.М.",
+                        discipline: "Стандартизація прогр.систем",
+                        link: "https://us05web.zoom.us/j/84118575752?pwd=NXUyYUtvZW9iKzBVYmczMEdHMlRsZz09",
+                    },
+                    {
+                        teacher: "Івченко Ю.М.",
+                        discipline: "Пргорам.забезп.комп.мереж",
+                        link: "https://us05web.zoom.us/j/84118575752?pwd=NXUyYUtvZW9iKzBVYmczMEdHMlRsZz09",
+                    },
+                ],
+            },
+            {
+                name: "Четвер",
+                dayNumber: 4,
+                lections: [{
+                        teacher: "Шаравара В.В",
+                        discipline: "Семантичний web",
+                        link: "https://us05web.zoom.us/j/89552674199?pwd=NoklBOAxqLvQ5Qbt0ER49oSBvy73VZ.1",
+                    },
+                    {
+                        teacher: "-",
+                        discipline: "-",
+                        link: null,
+                    },
+                    {
+                        teacher: "Горбова О.В.",
+                        discipline: "Комп.дизайн та 3-d-моделювання",
+                        link: "https://us04web.zoom.us/j/7445088241?pwd=ak1XbmprdFBUQnRZOWszWU91VHdyUT09",
+                    },
+                    {
+                        teacher: "Горбова О.В.",
+                        discipline: "Комп.дизайн та 3-d-моделювання",
+                        link: "https://us04web.zoom.us/j/7445088241?pwd=ak1XbmprdFBUQnRZOWszWU91VHdyUT09",
+                    },
+                ],
+            },
+        ];
+
         let weekTemplate = ``;
 
-        days.forEach(({
+        (isDenominator ? denominationDays : days).forEach(({
             name,
             lections,
             dayNumber,
@@ -267,6 +374,7 @@
                                     ?   `<div class="flex justify-center">
                                             <a
                                                 href="${link}"
+                                                target="_blank"
                                                 class="cursor-pointer bg-indigo-500 text-white px-4 py-2 border rounded-md hover:bg-white hover:border-indigo-500 hover:text-black ">
                                                 Open Link
                                             </a>
