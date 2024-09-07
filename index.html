@@ -13,7 +13,7 @@
             align-items: center;
             justify-content: center;
             min-height: 100dvh;
-            padding: 20px 0;
+            padding: 54px 0 44px;
         }
 
         .week {
@@ -76,6 +76,7 @@
 
 <body>
     <div class="page">
+        <span class="rounded-full fixed font-bold flex items-center justify-center bg-violet-600 top-1.5 right-1.5 text-white w-11 h-11" id="weekLabel"></span>
         <div class="week" id="week"></div>
         <span id="weekend" class="weekend fixed inset-x-0 bottom-0 bg-lime-500 text-white font-bold flex justify-center">Вихідний</span>
     </div>
@@ -125,6 +126,8 @@
 
         const ROOT = document.getElementById("week");
         const WEEKEND = document.getElementById("weekend");
+        const WEEK_LABEL = document.getElementById("weekLabel");
+
         const weekends = [3,5,6,0];
 
         const getTimeFormat = (hours, minutes) => ({
@@ -194,6 +197,7 @@
 
         const activeLection = getActiveLectionNumber();
 
+        // Знаменник
         const denominationDays = [
             {
                 name: "Понеділок",
@@ -214,55 +218,58 @@
             {
                 name: "Вівторок",
                 dayNumber: 2,
-                lections: [{
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                lections: [
+                    {
+                        teacher: "Волкова С.І.",
+                        discipline: "Онтологічне забезпечення web-систем",
+                        link: null,
                     },
                     {
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                        teacher: "Волкова С.І.",
+                        discipline: "Онтологічне забезпечення web-систем",
+                        link: null,
                     },
                     {
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                        teacher: "Івченко Ю.М.",
+                        discipline: "Пргорам.забезп.комп.мереж",
+                        link: "https://us05web.zoom.us/j/84118575752?pwd=NXUyYUtvZW9iKzBVYmczMEdHMlRsZz09",
                     },
                     {
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                        teacher: "Івченко Ю.М.",
+                        discipline: "Стандартизація прогр.систем",
+                        link: "https://us05web.zoom.us/j/84118575752?pwd=NXUyYUtvZW9iKzBVYmczMEdHMlRsZz09",
                     },
                 ],
             },
             {
                 name: "Четвер",
                 dayNumber: 4,
-                lections: [{
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                lections: [
+                    {
+                        teacher: "Шаравара В.В",
+                        discipline: "Семантичний web",
+                        link: "https://us05web.zoom.us/j/89552674199?pwd=NoklBOAxqLvQ5Qbt0ER49oSBvy73VZ.1",
                     },
                     {
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                        teacher: "-",
+                        discipline: "-",
+                        link: null,
                     },
                     {
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                        teacher: "Горбова О.В.",
+                        discipline: "Комп.дизайн та 3-d-моделювання",
+                        link: "https://us04web.zoom.us/j/7445088241?pwd=ak1XbmprdFBUQnRZOWszWU91VHdyUT09",
                     },
                     {
-                        teacher: "Іванов Іван",
-                        discipline: "Основи основ",
-                        link: "#",
+                        teacher: "Горбова О.В.",
+                        discipline: "Комп.дизайн та 3-d-моделювання",
+                        link: "https://us04web.zoom.us/j/7445088241?pwd=ak1XbmprdFBUQnRZOWszWU91VHdyUT09",
                     },
                 ],
             },
         ];
 
+        // Чисельник
         const days = [
             {
                 name: "Понеділок",
@@ -314,7 +321,8 @@
             {
                 name: "Четвер",
                 dayNumber: 4,
-                lections: [{
+                lections: [
+                    {
                         teacher: "Шаравара В.В",
                         discipline: "Семантичний web",
                         link: "https://us05web.zoom.us/j/89552674199?pwd=NoklBOAxqLvQ5Qbt0ER49oSBvy73VZ.1",
@@ -415,6 +423,8 @@
         });
 
         ROOT.innerHTML = weekTemplate;
+
+        WEEK_LABEL.innerText = isDenominator ? "З" : "Ч";
 
         if (weekends.includes(currentDayNumber)) {
             WEEKEND.classList.add("active");
