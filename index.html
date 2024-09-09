@@ -119,83 +119,9 @@
             return weeknum;
         };
 
-
         const currentDate = new Date();
         const currentDayNumber = currentDate.getDay();
         const isDenominator = currentDate.getWeek() % 2 !== 0;
-
-        const ROOT = document.getElementById("week");
-        const WEEKEND = document.getElementById("weekend");
-        const WEEK_LABEL = document.getElementById("weekLabel");
-
-        const weekends = [3,5,6,0];
-
-        const getTimeFormat = (hours, minutes) => ({
-            hours,
-            minutes,
-        });
-
-        const getTimeTemplate = (from, to, delay) => ({
-            from: getTimeFormat(...from),
-            to: getTimeFormat(...to),
-            delay,
-        });
-
-        const lectionTimeRange = {
-            1: getTimeTemplate([8, 0], [9, 20], 10),
-            2: getTimeTemplate([9, 30], [10, 50], 10),
-            3: getTimeTemplate([11, 0], [12, 20], 40),
-            4: getTimeTemplate([13, 0], [14, 20], 10),
-            5: getTimeTemplate([14, 30], [15, 50], 10),
-            6: getTimeTemplate([16, 0], [17, 20], 10),
-            7: getTimeTemplate([20, 0], [21, 40], 10),
-        };
-
-        const getActiveLectionNumber = () => {
-            const currentDate = new Date();
-
-            const currentTime = {
-                hours: currentDate.getHours(),
-                minutes: currentDate.getMinutes(),
-            };
-
-            const timeRange = Object.entries(lectionTimeRange);
-
-            let activeLection = {
-                current: null,
-                next: null,
-            };
-
-            for (let i = 0; i < timeRange.length; i++) {
-                const [key, value] = timeRange[i];
-                const keyNum = Number(key);
-
-                const {
-                    from,
-                    to,
-                } = value;
-
-                if (from.hours <= currentTime.hours && to.hours >= currentTime.hours) {
-                    if (from.minutes <= currentTime.minutes && to.minutes >= currentTime.minutes) {
-                        activeLection = {
-                            current: key,
-                            next: null,
-                        };
-
-                        break;
-                    }
-
-                    activeLection = {
-                        current: key,
-                        next: lectionTimeRange?.[keyNum + 1] ? keyNum + 1 : null,
-                    };
-                }
-            }
-
-            return activeLection;
-        };
-
-        const activeLection = getActiveLectionNumber();
 
         // Знаменник
         const denominationDays = [
@@ -346,9 +272,94 @@
             },
         ];
 
+        const targetDay = isDenominator ? denominationDays : days;
+
+        const ROOT = document.getElementById("week");
+        const WEEKEND = document.getElementById("weekend");
+        const WEEK_LABEL = document.getElementById("weekLabel");
+
+        const weekends = [3,5,6,0];
+
+        const getTimeFormat = (hours, minutes) => ({
+            hours,
+            minutes,
+        });
+
+        const getTimeTemplate = (from, to, delay) => ({
+            from: getTimeFormat(...from),
+            to: getTimeFormat(...to),
+            delay,
+        });
+
+        const lectionTimeRange = {
+            1: getTimeTemplate([8, 0], [9, 20], 10),
+            2: getTimeTemplate([9, 30], [10, 50], 10),
+            3: getTimeTemplate([11, 0], [12, 20], 40),
+            4: getTimeTemplate([13, 0], [14, 20], 10),
+            5: getTimeTemplate([14, 30], [15, 50], 10),
+            6: getTimeTemplate([16, 0], [17, 20], 10),
+            7: getTimeTemplate([20, 0], [21, 40], 10),
+        };
+
+        const getActiveLectionNumber = () => {
+            const currentDate = new Date();
+
+            const currentTime = {
+                hours: currentDate.getHours(),
+                minutes: currentDate.getMinutes(),
+            };
+
+            const timeRange = Object.entries(lectionTimeRange);
+
+            let activeLection = {
+                current: null,
+                next: null,
+            };
+
+            for (let i = 0; i < timeRange.length; i++) {
+                const [key, value] = timeRange[i];
+                const keyNum = Number(key);
+
+                const {
+                    from,
+                    to,
+                    delay,
+                } = value;
+
+                if (from.hours <= currentTime.hours && to.hours >= currentTime.hours) {
+                    if (
+                        from.minutes <= currentTime.minutes 
+                        && to.minutes >= currentTime.minutes
+                    ) {
+                        activeLection = {
+                            current: key,
+                            next: null,
+                        };
+
+                        break;
+                    }
+
+                    // if (to.minutes + delay > currentTime.minutes) {
+                    //     const hasNextLection = lectionTimeRange?.[keyNum + 1];
+
+                    //     activeLection = {
+                    //         current: hasNextLection ? key : null,
+                    //         next: hasNextLection && to.hours === currentTime.hours ? keyNum + 1 : null,
+                    //     };
+
+                    //     break;
+                    // }
+                }
+            }
+
+            return activeLection;
+        };
+
+        const activeLection = getActiveLectionNumber();
+
         let weekTemplate = ``;
 
-        (isDenominator ? denominationDays : days).forEach(({
+        targetDay.forEach(({
             name,
             lections,
             dayNumber,
