@@ -298,7 +298,7 @@
             4: getTimeTemplate([13, 0], [14, 20], 10),
             5: getTimeTemplate([14, 30], [15, 50], 10),
             6: getTimeTemplate([16, 0], [17, 20], 10),
-            7: getTimeTemplate([20, 0], [21, 40], 10),
+            7: getTimeTemplate([17, 30], [18, 50], 10),
         };
 
         const getActiveLectionNumber = () => {
@@ -323,21 +323,37 @@
                 const {
                     from,
                     to,
-                    delay,
                 } = value;
 
                 if (from.hours <= currentTime.hours && to.hours >= currentTime.hours) {
-                    if (
-                        from.minutes <= currentTime.minutes 
-                        && to.minutes >= currentTime.minutes
-                    ) {
-                        activeLection = {
-                            current: key,
-                            next: null,
-                        };
+                    if (from.hours === currentTime.hours) {
+                        if (from.minutes <= currentTime.minutes && to.minutes >= currentTime.minutes) {
+                            activeLection = {
+                                current: key,
+                                next: null,
+                            };
 
-                        break;
+                            break;
+                        }
+                    } else {
+                        if (to.minutes >= currentTime.minutes) {
+                            activeLection = {
+                                current: key,
+                                next: null,
+                            };
+
+                            break;
+                        }
                     }
+                    
+                    // if (from.minutes <= currentTime.minutes && to.minutes >= currentTime.minutes) {
+                    //     activeLection = {
+                    //         current: key,
+                    //         next: null,
+                    //     };
+
+                    //     break;
+                    // }
 
                     // if (to.minutes + delay > currentTime.minutes) {
                     //     const hasNextLection = lectionTimeRange?.[keyNum + 1];
