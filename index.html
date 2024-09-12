@@ -337,10 +337,10 @@
 
                 if (from.hours <= currentTime.hours && to.hours >= currentTime.hours) {
                     if (from.hours === currentTime.hours) {
-                        if (from.minutes <= currentTime.minutes && to.minutes >= currentTime.minutes) {
+                        if (from.minutes <= currentTime.minutes) {
                             activeLection = {
                                 current: key,
-                                next: null,
+                                next: keyNum + 1,
                             };
 
                             break;
@@ -349,32 +349,12 @@
                         if (to.minutes >= currentTime.minutes) {
                             activeLection = {
                                 current: key,
-                                next: null,
+                                next: keyNum + 1,
                             };
 
                             break;
                         }
                     }
-                    
-                    // if (from.minutes <= currentTime.minutes && to.minutes >= currentTime.minutes) {
-                    //     activeLection = {
-                    //         current: key,
-                    //         next: null,
-                    //     };
-
-                    //     break;
-                    // }
-
-                    // if (to.minutes + delay > currentTime.minutes) {
-                    //     const hasNextLection = lectionTimeRange?.[keyNum + 1];
-
-                    //     activeLection = {
-                    //         current: hasNextLection ? key : null,
-                    //         next: hasNextLection && to.hours === currentTime.hours ? keyNum + 1 : null,
-                    //     };
-
-                    //     break;
-                    // }
                 }
             }
 
