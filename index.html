@@ -137,6 +137,7 @@
         const currentDate = new Date();
         const currentDayNumber = currentDate.getDay();
         const isDenominator = currentDate.getWeek() % 2 !== 0;
+        const isDenominatorOrigin = isDenominator;
         const ROOT = document.getElementById("week");
         const WEEKEND = document.getElementById("weekend");
         const WEEK_LABEL = document.getElementById("weekLabel");
@@ -306,8 +307,10 @@
                 WEEK_LABEL.classList.add('outline', 'outline-4', 'outline-cyan-500', 'cursor-not-allowed');
             }
 
+            (isDenominatorOrigin ? DENOMINATOR_WEEK_LABEL : WEEK_LABEL).classList.add('bg-red-500');
+
             if (weekends.includes(currentDayNumber)) {
-                WEEKEND.classList.add("active");
+                WEEKEND.classList.add('active');
             }
         }
 
